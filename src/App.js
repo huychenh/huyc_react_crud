@@ -1,23 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import ProductList from "./components/product-list";
+import ProductForm from "./components/product-form";
+import { getProducts } from "./api/product-api";
 
 function App() {
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [products, setProducts] = useState([]);
+
+  // Load danh sách ban đầu
+  useEffect(() => {
+    getProducts().then((data) => setProducts(data.products));
+  }, []);
+
+  const handleDone = (product) => {
+    if (editingProduct) {
+      // Update sản phẩm trong state
+      setProducts((prev) =>
+        prev.map((p) => (p.id === product.id ? product : p))
+      );
+    } else {
+      // Add mới
+      setProducts((prev) => [...prev, product]);
+    }
+
+    setEditingProduct(null);
+  };
+
+  const handleDelete = (id) => {
+    setProducts((prev) => prev.filter((p) => p.id !== id));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: "20px" }}>
+      <ProductForm editingProduct={editingProduct} onDone={handleDone} />
+      <ProductList
+        products={products}
+        onEdit={(p) => setEditingProduct(p)}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }
