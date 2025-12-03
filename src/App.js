@@ -7,19 +7,18 @@ function App() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [products, setProducts] = useState([]);
 
-  // Load danh sách ban đầu
   useEffect(() => {
     getProducts().then((data) => setProducts(data.products));
   }, []);
 
   const handleDone = (product) => {
     if (editingProduct) {
-      // Update sản phẩm trong state
+      
       setProducts((prev) =>
         prev.map((p) => (p.id === product.id ? product : p))
       );
     } else {
-      // Add mới
+      
       setProducts((prev) => [...prev, product]);
     }
 
