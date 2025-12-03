@@ -1,0 +1,18 @@
+| Chức năng     | Endpoint                                                                 | Method |
+| ------------- | ------------------------------------------------------------------------ | ------ |
+| Lấy danh sách | [https://dummyjson.com/products](https://dummyjson.com/products)         | GET    |
+| Lấy 1 item    | [https://dummyjson.com/products/:id](https://dummyjson.com/products/:id) | GET    |
+| Thêm          | [https://dummyjson.com/products/add](https://dummyjson.com/products/add) | POST   |
+| Sửa           | [https://dummyjson.com/products/:id](https://dummyjson.com/products/:id) | PUT    |
+| Xóa           | [https://dummyjson.com/products/:id](https://dummyjson.com/products/:id) | DELETE |
+
+
+//Structure:
+
+src/
+ ├── components/
+ │    ├── ProductList.js
+ │    ├── ProductForm.js
+ ├── api/
+ │    └── productApi.js
+ └── App.js
