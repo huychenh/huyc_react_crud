@@ -1,47 +1,86 @@
-import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import UserDetail from './users/user_detail'
-import UserList from './users/user_list'
-import UserAdd from './users/user_add'
-import UserUpdate from './users/user_update'
-import UserPatch from './users/user_patch'
-import UserDelete from './users/user_delete'
+import UserList from './components/users/UserList'
+import UserUpdate from './components/users/UserUpdate'
+import UserDelete from './components/users/UserDelete'
+import UserAdd from './components/users/UserAdd'
+import { useState } from 'react'
+import UserDetail from './components/users/UserDetail'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleViewUser = (userId: number) => {
+    setSelectedUserId(userId);
+    setShowDetailModal(true);
+  };
+
+  const handleEditUser = (userId: number) => {
+    setSelectedUserId(userId);
+    setShowUpdateModal(true);
+  };
+
+  const handleDeleteUser = (userId: number) => {
+    setSelectedUserId(userId);
+    setShowDeleteModal(true);
+  };
+
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <a href="https://react.dev" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
+        <h1>Simple CRUD React</h1>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+
+      <div className="header-container">
+        <h2>User List</h2>
+        <button className="add-user-button" onClick={() => setShowAddModal(true)}>
+          Add New User
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <UserList />
-      <UserDetail />
-      <UserAdd />
-      <UserUpdate />
-      <UserPatch />
-      <UserDelete />
+
+      {/* List */}
+      <UserList
+        onViewUser={handleViewUser}
+        onEditUser={handleEditUser}
+        onDeleteUser={handleDeleteUser}
+      />
+
+      {/* Detail */}
+      {showDetailModal && selectedUserId && (
+        <UserDetail
+          userId={selectedUserId}
+          onClose={() => setShowDetailModal(false)}
+        />
+      )}
+
+      {/* Add */}
+      {showAddModal && <UserAdd onClose={() => setShowAddModal(false)} />}
+
+      {/* Update */}
+      {showUpdateModal && selectedUserId && (
+        <UserUpdate
+          userId={selectedUserId}
+          onClose={() => setShowUpdateModal(false)}
+        />
+      )}
+
+      {/* Delete */}
+      {showDeleteModal && selectedUserId && (
+        <UserDelete
+          userId={selectedUserId}
+          onClose={() => setShowDeleteModal(false)}
+        />
+      )}
     </>
   )
 }
 
-export default App
+export default App;

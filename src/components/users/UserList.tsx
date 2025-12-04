@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import type { User } from "../types/User";
-import type { UsersResponse } from "../types/UserResponse";
-import { GET_USERS_API_URL } from "../utils/url-helper";
+import type { User } from "../../types/user";
+import { GET_USERS_API_URL } from "../../api/endpoints";
+import type { UsersResponse } from "../../types/user-response";
+import type { UserListProps } from "../../interfaces/user-list-props";
 
-export default function UserList() {
+export default function UserList({ onViewUser, onEditUser, onDeleteUser }: UserListProps) {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -24,14 +25,14 @@ export default function UserList() {
 
     return (
         <div>
-            <h2>User List</h2>
-            <table style={{ borderCollapse: "collapse", width: "100%" }}>
+            <table style={{ borderCollapse: "collapse", width: "100%" }} className="user-table">
                 <thead>
                     <tr>
                         <th style={{ border: "1px solid #ccc", padding: "8px" }}>No.</th>
                         <th style={{ border: "1px solid #ccc", padding: "8px" }}>First Name</th>
                         <th style={{ border: "1px solid #ccc", padding: "8px" }}>Last Name</th>
                         <th style={{ border: "1px solid #ccc", padding: "8px" }}>Email</th>
+                        <th style={{ border: "1px solid #ccc", padding: "8px" }}>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,6 +42,30 @@ export default function UserList() {
                             <td style={{ border: "1px solid #ccc", padding: "8px" }}>{user.firstName}</td>
                             <td style={{ border: "1px solid #ccc", padding: "8px" }}>{user.lastName}</td>
                             <td style={{ border: "1px solid #ccc", padding: "8px" }}>{user.email}</td>
+
+                            <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                                <a
+                                    href="#"
+                                    onClick={() => onViewUser && onViewUser(user.id)}
+                                    style={{ marginRight: 8 }}
+                                >
+                                    View
+                                </a>
+                                |
+                                <a href="#"
+                                    style={{ marginLeft: "8px", marginRight: "8px" }}
+                                    onClick={() => onEditUser && onEditUser(user.id)}
+                                >
+                                    Edit
+                                </a>
+                                |                                
+                                <a href="#"
+                                    style={{ marginLeft: "8px", color: "red" }}
+                                    onClick={() => onDeleteUser && onDeleteUser(user.id)}
+                                >
+                                    Delete
+                                </a>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
